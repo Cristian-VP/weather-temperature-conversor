@@ -5,20 +5,8 @@ import { WeatherModel } from '../models/weather.model';
 import { catchError, map } from 'rxjs/operators';
 import { weatherApiKey } from '../../environments/weatherApiKey';
 import { ErrorModel } from '../models/error.model';
-/**
- * ### WeatherService
-- Propósito: Encapsular la comunicación con la API de clima y transformar la respuesta en objetos que la UI consuma fácilmente.
-- Entradas (métodos públicos):
-  - `obtenerPronosticoPorCiudad(city: string, units?: 'metric'|'imperial')`
-  - `obtenerPronosticoPorCoords(lat: number, lon: number, units?: 'metric'|'imperial')`
-- Salidas:
-  - `Observable<DiaPronostico[]>` o `Observable<WeatherModel>` (usar Observable para aprovechar RxJS y `async` en plantillas).
-- Errores:
-  - Emitir un Observable de error con forma `{ code: number, message: string }` o lanzar `HttpErrorResponse` manejable.
-- Indicaciones:
-  - No almacenar la API key en el repo. Leerla desde `environment` o pasarla como parámetro para prácticas locales.
-  - Incluir `catchError` para transformar errores HTTP en mensajes legibles.
- * **/
+
+
 @Injectable({
   providedIn: 'root'
 })

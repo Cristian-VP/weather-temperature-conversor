@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { WeatherService } from '../services/weather.service';
 import { WeatherModel } from '../models/weather.model';
 import { finalize } from 'rxjs/operators';
 import { ErrorModel } from '../models/error.model';
+import { computed, signal } from '@angular/core';
 
 /**
  * ### WeatherComponent
@@ -33,13 +34,26 @@ import { ErrorModel } from '../models/error.model';
 })
 export class WeatherComponent {
   private weatherService: WeatherService;
-  weatherData: WeatherModel[] = [];
-  unit: 'C' | 'F' = 'C';
-  loading: boolean = false;
-  error: ErrorModel | null = null;
+  private weatherDataBase = signal<WeatherModel[]>([]);
+  unit = signal<'C' | 'F'>('C');
+  loading = signal<boolean>(false);
+  error = signal<ErrorModel | null>(null);
 
   constructor(weatherService: WeatherService) {
     this.weatherService = weatherService;
+  }
+
+   get weatherData() {
+    return computed(() => {
+      if (this.unit() === 'C') return this.weatherDataBase();
+      return this.weatherDataBase().map(d => ({
+        ...d,
+        maxTemperature: this.celsiusToFahrenheit(d.maxTemperature),
+        minTemperature: this.celsiusToFahrenheit(d.minTemperature),
+        feelsLikeMaxTemperature: this.celsiusToFahrenheit(d.feelsLikeMaxTemperature),
+        feelsLikeMinTemperature: this.celsiusToFahrenheit(d.feelsLikeMinTemperature),
+      }));
+    });
   }
 
   ngOnInit() {
@@ -47,17 +61,17 @@ export class WeatherComponent {
   }
 
   loadWeatherPrognosis() {
-    this.loading = true;
-    this.error = null;
-    this.weatherService.getWeatherData()
-    .pipe(finalize(() => this.loading = false))
-    .subscribe({
-      next: (data) =>{
-        this.weatherData = data;
+    this.loading.set(true);
+    this.weatherService.getWeatherData().subscribe({
+      next: (data) => {
+        this.weatherDataBase.set(data ?? []);
+        this.error.set(null);
+        this.loading.set(false);
       },
       error: (error: ErrorModel) => {
-        this.weatherData = [];
-        this.error = this.handleError(error);
+        this.weatherDataBase.set([]);
+        this.error.set(this.handleError(error));
+        this.loading.set(false);
       }
     });
   }
@@ -75,25 +89,10 @@ export class WeatherComponent {
   }
 
   toggleUnit(unit: 'C' | 'F') {
-    this.unit = unit;
-    this.weatherData = this.weatherData.map(day => {
-      const factor = unit === 'C' ? 1 : 1.8;
-      const offset = unit === 'C' ? 0 : 32;
-      return {
-        ...day,
-        maxTemperature: unit === 'C' ? this.fahrenheitToCelsius(day.maxTemperature) : this.celsiusToFahrenheit(day.maxTemperature),
-        minTemperature: unit === 'C' ? this.fahrenheitToCelsius(day.minTemperature) : this.celsiusToFahrenheit(day.minTemperature),
-        feelsLikeMaxTemperature: unit === 'C' ? this.fahrenheitToCelsius(day.feelsLikeMaxTemperature) : this.celsiusToFahrenheit(day.feelsLikeMaxTemperature),
-        feelsLikeMinTemperature: unit === 'C' ? this.fahrenheitToCelsius(day.feelsLikeMinTemperature) : this.celsiusToFahrenheit(day.feelsLikeMinTemperature)
-      };
-    });
+    if (this.unit() !== unit) this.unit.set(unit);
   }
 
-  celsiusToFahrenheit(celsius: number): number {
+  private celsiusToFahrenheit(celsius: number): number {
     return (celsius * 9/5) + 32;
-  }
-
-  fahrenheitToCelsius(fahrenheit: number): number {
-    return (fahrenheit - 32) * 5/9;
   }
 }

@@ -7,6 +7,6 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-export class App {
-  protected readonly title = signal('temperature_conversor');
+export class AppComponent {
+  protected readonly title = signal('Weather App');
 }
