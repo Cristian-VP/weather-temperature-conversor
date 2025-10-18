@@ -43,9 +43,8 @@ __screenshots__/
 Thumbs.db
 
 # Env / secrets
-.env
+weather-key.env
 .env.local
 .env.*.local
-src/environments/*.local.ts
 secret*.key
  
