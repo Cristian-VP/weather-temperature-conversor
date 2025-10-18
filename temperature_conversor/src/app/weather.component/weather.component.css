@@ -1,18 +1,74 @@
-mat-grid-list {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr;
-    gap: 1.5em;
+mat-card {
+    width: 68vw;
+    height: 40vh;
 }
 
-mat-grid-list  mat-grid-tile:nth-child(1){
-    
+mat-card-header {
+    height: auto;
+    padding: 1rem;
     background-color: lightgreen;
-
 }
 
+.current-temperature-section {
+    display: flex;
+    width: 50%;
+    background-color: lightcoral;
+}
 
-mat-grid-list  mat-grid-tile:nth-child(2) {  
+figcaption {
+    display: inline-block;
+    width: auto;
+    background-color: lightgray;
+}
+
+.current-temperature{
+    flex: 1;
+    height: 100%;
+    padding-left: 1em;
+    display: inline-block;
+    background-color: lightyellow;
+}
+
+.current-temperature div{
+    display: inline-block;
+}
+
+.temperature-value {
+    width: 60%;
+    height: 100%;
+    background-color: lightpink;
+  
+}
+
+.temperature-units {
+    width: 40%;
+    height: 100%;
+    background-color: lightseagreen;
+   
+}
+
+.current-info {
+    width: 50%;
+    text-align: right;
+    background-color: lightblue;
+    margin-left: 2vw;
+}
+
+.current-info p:nth-child(1) {
+    font-size: var(--font-size-xxl);
+    line-height: 2.5rem;
+    font-weight: var(--font-weight-bold);
+}
+
+.current-info p:nth-child(2), .current-info p:nth-child(3) {
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-semi-bold);
+    line-height: 1.2rem;
+    color: var(--text-grey);
+}
+
+mat-card-content {
+    height: 62%;  
     background-color: red;
 
 }
