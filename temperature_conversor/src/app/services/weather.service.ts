@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { WeatherModel } from '../models/weather.model';
 import { catchError, map } from 'rxjs/operators';
-import { weatherApiKey } from '../../environments/weatherApiKey';
+import { environment } from '../../environments/apiKey';
 import { ErrorModel } from '../models/error.model';
 
 
@@ -11,7 +11,7 @@ import { ErrorModel } from '../models/error.model';
   providedIn: 'root'
 })
 export class WeatherService {
-  private apiKey: string = weatherApiKey.key.apiKey;
+  private apiKey: string = environment.weatherApiKey;
   private apiURL: string = 'https://weather.googleapis.com/v1/forecast/days:lookup';
   private HttpClient: HttpClient;
   private response: any;

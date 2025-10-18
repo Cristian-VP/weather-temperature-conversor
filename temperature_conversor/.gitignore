@@ -43,7 +43,7 @@ __screenshots__/
 Thumbs.db
 
 # Env / secrets
-weather-key.env
+src/environments/apiKey.ts
 .env.local
 .env.*.local
 secret*.key
