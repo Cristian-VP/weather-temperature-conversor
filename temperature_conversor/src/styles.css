@@ -5,7 +5,7 @@
     /* Color Palette */
     --primary-color: #1976d2;
     --accent-color: #ff4081;
-    --background-color: #f5f5f5;
+    --background-color: #e4e3e6;
     --text-color: #212121;
 
     /* Typography */
@@ -16,16 +16,12 @@
     --font-size-s: 14px;
     --font-size-m: 16px;
     --font-size-l: 18px;
+    --font-size-xl: 24px;
+    --font-size-xxl: 32px;
     --font-weight-normal: 400;
     --font-weight-semi-bold: 600;
     --font-weight-bold: 700;
-
-    /* Spacing */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
+    
 
     /* Border Radius */
     --border-radius-sm: 4px;
@@ -42,6 +38,8 @@
     appearance: none;
 }
 
-body { 
-    font-family: var(--font-primary); 
+body {
+    font-family: var(--font-primary);
+    background-color: var(--background-color); 
+    color: var(--text-color);
 }
