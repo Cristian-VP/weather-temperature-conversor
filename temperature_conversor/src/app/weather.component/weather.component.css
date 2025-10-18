@@ -1,0 +1,19 @@
+mat-grid-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr;
+    gap: 1.5em;
+}
+
+mat-grid-list  mat-grid-tile:nth-child(1){
+    
+    background-color: lightgreen;
+
+}
+
+
+mat-grid-list  mat-grid-tile:nth-child(2) {  
+    background-color: red;
+
+}
+

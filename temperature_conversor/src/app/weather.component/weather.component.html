@@ -1,1 +1,41 @@
-<p>weather works!</p>
+<mat-card >  
+    <mat-header>
+        <section class="current-temperature-section">
+            <figcaption>
+                <img [src]="currentDay.iconBaseUri" alt="Condition icon">
+            </figcaption>
+            <article class="current-temperature">
+                <div class="temperature-value">
+                    <span class="farenheit-value" *ngIf="unit() === 'F'">{{ currentDay.temperature }}</span>
+                    <span class="celsius-value" *ngIf="unit() === 'C'">{{ currentDay.temperature }}</span>
+                </div>
+                <div>
+                    <span class="temperature-celsius-unit" aria-label="°Celsius" role="button">°C</span>
+                    <a href="#" (click)="toggleUnit('C')" display="none">°C</a>
+                    <span class="separator">|</span>
+                    <a href="#" (click)="toggleUnit('F')">°F</a>
+                    <span class="temperature-farenheit-unit" aria-label="°Fahrenheit" role="button" display="none">°F</span>
+                </div>
+            </article>
+        </section>
+        <section class="current-info">
+            <p>Tiempo</p>
+            <p class="current-day">{{ currentDay.dayName }}</p>
+            <p class="weather-condition">{{ currentDay.weatherCondition }}</p>
+        </section>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-card *ngFor="let day of weatherData()" class="forecast-card">
+            <mat-card-header>
+                <mat-card-title>{{ day.dayName | slice:0:3 }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                
+            </mat-card-content>
+            <footer>
+                <div></div>
+                <div></div>
+            </footer>
+        </mat-card>
+    </mat-card-content>
+</mat-card>

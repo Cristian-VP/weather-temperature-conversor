@@ -6,6 +6,9 @@ import { WeatherModel } from '../models/weather.model';
 import { finalize } from 'rxjs/operators';
 import { ErrorModel } from '../models/error.model';
 import { computed, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
 
 /**
  * ### WeatherComponent
@@ -28,16 +31,22 @@ import { computed, signal } from '@angular/core';
 @Component({
   selector: 'app-weather',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    MatGridListModule,
+    MatCardModule
+  ],
   templateUrl: './weather.component.html',
   styleUrls: ['./weather.component.css']
 })
 export class WeatherComponent {
   private weatherService: WeatherService;
-  private weatherDataBase = signal<WeatherModel[]>([]);
+  weatherDataBase = signal<WeatherModel[]>([]);
   unit = signal<'C' | 'F'>('C');
   loading = signal<boolean>(false);
   error = signal<ErrorModel | null>(null);
+  conditionIcon: string = ''; // Añadido para evitar error en template
 
   constructor(weatherService: WeatherService) {
     this.weatherService = weatherService;
@@ -48,6 +57,7 @@ export class WeatherComponent {
       if (this.unit() === 'C') return this.weatherDataBase();
       return this.weatherDataBase().map(d => ({
         ...d,
+        temperature: this.celsiusToFahrenheit(d.temperature),
         maxTemperature: this.celsiusToFahrenheit(d.maxTemperature),
         minTemperature: this.celsiusToFahrenheit(d.minTemperature),
         feelsLikeMaxTemperature: this.celsiusToFahrenheit(d.feelsLikeMaxTemperature),
@@ -95,4 +105,10 @@ export class WeatherComponent {
   private celsiusToFahrenheit(celsius: number): number {
     return (celsius * 9/5) + 32;
   }
+
+  get currentDay() {
+    return this.weatherData()[0]; 
+  }
+
+
 }

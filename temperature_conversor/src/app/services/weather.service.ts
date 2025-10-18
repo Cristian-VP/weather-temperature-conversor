@@ -47,7 +47,9 @@ export class WeatherService {
   private refactorWeatherResponse(response: any): WeatherModel[] {
   // Mapea todos los días del array forecastDays
     return response.forecastDays?.map((day: any) => ({
+      temperature: Number(day.daytimeForecast?.temperature?.degrees ?? NaN),
       displayDate: `${day.displayDate?.year}-${day.displayDate?.month}-${day.displayDate?.day}`,
+      dayName: new Date(day.displayDate?.year, day.displayDate?.month - 1, day.displayDate?.day).toLocaleDateString('es-ES', { weekday: 'long' }),
       daytimeForecast: day.daytimeForecast?.weatherCondition?.description?.text || '',
       weatherCondition: day.daytimeForecast?.weatherCondition?.type || '',
       maxTemperature: Number(day.maxTemperature?.degrees ?? NaN),
