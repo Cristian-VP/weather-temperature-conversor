@@ -22,12 +22,15 @@ import { CurrentDay } from '../models/currentDay';
 export class WeatherComponent {
   private weatherService: WeatherService;
   weatherDataBase = signal<WeatherModel[]>([]);
-  currentDayData = signal<CurrentDay>({ currentTime: '', temperature: NaN , iconBaseUri: '', wheatherCondition: '' });
+  currentDayData = signal<CurrentDay>({ 
+    currentTime: '', temperature: NaN , 
+    iconBaseUri: '', 
+    wheatherCondition: '' 
+  });
   unit = signal<'C' | 'F'>('C');
   loading = signal<boolean>(false);
   error = signal<ErrorModel | null>(null);
-  conditionIcon: string = ''; // Añadido para evitar error en template
-
+  
   constructor(weatherService: WeatherService) {
     this.weatherService = weatherService;
   }
@@ -45,6 +48,7 @@ export class WeatherComponent {
     });
   }
 
+  
   get currentDay() {
     return computed(() => {
       const data = this.currentDayData();
@@ -53,6 +57,28 @@ export class WeatherComponent {
         ...data,
         temperature: this.celsiusToFahrenheit(data.temperature),
       };
+    });
+  }
+
+  get currentTemperature() {
+    return computed(() => Math.round(this.currentDay().temperature));
+  }
+
+  get currentIconUri() {
+    return computed(() => this.currentDay().iconBaseUri?.concat('.png') || '');
+  }
+
+  get reformatWeatherCondition() {
+    return computed(() => {
+      const condition = this.currentDay().wheatherCondition;
+      return condition ? this.reformatWord(true, condition) : '';
+    });
+  }
+
+  get reformatDayName() {
+    return computed(() => {
+      const data = this.weatherDataBase();
+      return data.length > 0 ? this.reformatWord(false, data[0].dayName) : '';
     });
   }
 
@@ -69,6 +95,7 @@ export class WeatherComponent {
       },
       error: (error: ErrorModel) => {
         console.error(error);
+        this.error.set(this.handleError(error));
       }
     });
   }
@@ -92,7 +119,10 @@ export class WeatherComponent {
   }
 
   handleError(error: ErrorModel): ErrorModel {
-    const e: ErrorModel = { code: error?.code ?? 0, message: error?.message ?? 'Ocurrió un error inesperado.' };
+    const e: ErrorModel = { 
+      code: error?.code ?? 0, 
+      message: error?.message ?? 'Ocurrió un error inesperado.' 
+    };
     switch (e.code) {
       case 400: e.message = 'Solicitud incorrecta. Verifica los parámetros.'; break;
       case 401: e.message = 'No autorizado. Verifica tu clave API.'; break;
@@ -114,25 +144,10 @@ export class WeatherComponent {
   }
 
   reformatWord(toLowerCase: boolean, word: string): string {
+    if (!word) return '';
     var firstLetter = word.charAt(0).toUpperCase();
     var restOfWord = word.substring(1);
     return toLowerCase ? firstLetter.concat(restOfWord.toLowerCase()) : firstLetter.concat(restOfWord);
-  }
-
-  get reformatDayName() {
-    return this.reformatWord(false, this.weatherDataBase()[0].dayName);
-  }
-
-  get reformatWeatherCondition() {
-    return this.reformatWord(true, this.currentDayData().wheatherCondition);
-  }
-
-  get currentIconUri() {
-    return this.currentDayData().iconBaseUri?.concat('.png');
-  }
-
-  get currentTemperature() {
-    return this.currentDayData().temperature;
   }
 
 }

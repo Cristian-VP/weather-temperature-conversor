@@ -1,5 +1,4 @@
-mat-card {
-    
+mat-card {    
     height: 100vh;
     background-color: var(--background-color);
     display: flex;
@@ -16,8 +15,8 @@ mat-card-title {
 }
 
 section {
-    width: 68vw;
-    height: 40vh;
+    width: auto;
+    height: auto;
  	padding: 1rem;
     border-radius: var(--border-radius-md);
 }
